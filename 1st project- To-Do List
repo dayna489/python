@@ -1,0 +1,79 @@
+tasks = []
+
+
+def add_task(task):
+  tasks.append({"task": task, "completed": False})
+
+
+def view_tasks():
+  if tasks:
+    print("To-Do List:")
+    for i, task in enumerate(tasks, 1):
+      status = "X" if task["completed"] else " "
+      print(f"{i}. [{status}] {task['task']}")
+  else:
+    print("No tasks in the list")
+
+
+def mark_task_completed(index):
+  if index >= 1 and index <= len(tasks):
+    tasks[index - 1]["completed"] = True
+    print("great job!!! uwu")
+  else:
+    print("Invalid task index")
+
+
+def remove_task(index):
+  if index >= 1 and index <= len(tasks):
+    del tasks[index - 1]
+    print("task removed")
+  else:
+    print("Invalid task index")
+
+def save_tasks(filename):
+  with open(filename, "r") as file:
+    for task in tasks:
+      file.write(task["task"] + "," + str(task["completed"]) + "\n")
+
+def load_tasks(filename):
+  global tasks 
+  tasks = []
+  try: 
+    with open (filename, "r") as file:
+      for line in file:
+        task, completed = line.strip().split(",")
+        task.append({"task": task, "completed": bool(completed)})
+  except FileNotFoundError:
+    pass # if file does not exist, start with an empty to-do list
+
+def main(): 
+  load_tasks("todo.txt")
+  while True: 
+    print("\n1. Add task")
+    print("2. View tasks")
+    print("3. Mark task as completed")
+    print("4. Remove task")
+    print("5. Save and Quit")
+    choice = input("Enter your choice:")
+    
+    if choice == "1":
+      task = input("Enter task: ") 
+      add_task(task)
+    elif choice == "2":
+      view_tasks()
+    elif choice == "3":
+      index = int(input("enter task index to mark as completed:"))
+      mark_task_completed(index)
+    elif choice == "4":
+      index = int(input("enter task index to remove:"))
+      remove_task(index)
+    elif choice == "5":
+      save_tasks("todo.txt")
+      print("To-Do List saved. Goodbye!")
+      break
+    else:
+      print("invalid choice")
+
+if __name__ == "__main__":
+  main()
+  
